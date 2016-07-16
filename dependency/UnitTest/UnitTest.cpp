@@ -52,3 +52,11 @@ void UnitTest::addTestClass(ITestClass* testClass)
 {
 	m_TestClassList.push_back(testClass);
 }
+
+
+void UnitTest::displayError(const string& message)
+{
+    std::cout << termcolor::lightRed << "ERROR : " << message <<endl;
+    std::cout << termcolor::white;
+    std::cout.copyfmt(std::ios(nullptr));
+}

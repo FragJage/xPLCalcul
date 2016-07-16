@@ -88,6 +88,7 @@ class TestClass : public ITestClass
             else
                 std::cout << termcolor::lightGreen << "    Errors : 0";
 			std::cout << std::endl << std::endl;
+            std::cout.copyfmt(std::ios(nullptr));
 
             *prunCount += runCount;
             *perrorCount += errorCount;
@@ -114,6 +115,7 @@ class UnitTest
 		~UnitTest();
 		bool run();
 		void addTestClass(ITestClass* testClass);
+		void displayError(const std::string& message);
 
 	private:
 		std::vector<ITestClass *> m_TestClassList;

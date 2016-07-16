@@ -1,4 +1,5 @@
 #include <cstdlib>
+#include "Plateforms/Plateforms.h"
 #include "xPLLib/xPLDevice.h"
 #include "xPLLib/Schemas/SchemaSensor.h"
 #include "xPLLib/Schemas/SchemaControl.h"
@@ -103,16 +104,10 @@ void xPLCalcul::ConfigChange(const std::string& configName)
     formula = (*config)["formula"];
 
     iCalcul = CalculFind(configName);
-    if(iCalcul==-1)
-    {
-        pCalcul = new Calcul(configName, output, type, formula);
-        m_Calculs.push_back(pCalcul);
-    }
-    else
-    {
-        pCalcul = m_Calculs[iCalcul];
-        pCalcul->SetCalcul(output, type, formula);
-    }
+    if(iCalcul>0) ConfigDelete(configName);
+
+    pCalcul = new Calcul(configName, output, type, formula);
+    m_Calculs.push_back(pCalcul);
 
     CalculParse(pCalcul);
 }
@@ -461,7 +456,6 @@ void xPLCalcul::CalculEvaluate(Calcul* calcul)
 
 
 	LOG_ENTER;
-
     LOG_VERBOSE(m_Log) << "Evaluate " << calcul->m_Name << " => " << calcul->m_Formula;
 
     pos = 0;
@@ -496,7 +490,8 @@ void xPLCalcul::CalculParse(Calcul* calcul)
     size_t iStr, maxStr;
     size_t debDevice, finDevice;
     char currentSigne;
-    char previousSigne='0';
+    char prevSigne='0';
+    char nextSigne='0';
     xPL::SchemaSensorRequest sensorRequest;
 
 
@@ -508,10 +503,15 @@ void xPLCalcul::CalculParse(Calcul* calcul)
     for(iStr=0; iStr<maxStr; iStr++)
     {
         currentSigne = calcul->m_Formula.at(iStr);
+        if(iStr<maxStr-1)
+            nextSigne = calcul->m_Formula.at(iStr+1);
+        else
+            nextSigne = '0';
+
         if((currentSigne=='+')||(currentSigne=='*')||(currentSigne=='/')||(currentSigne=='&')||(currentSigne=='|')||(currentSigne=='>')||(currentSigne=='<')||(currentSigne=='(')||(currentSigne==')')) currentSigne = '#';
-        if((currentSigne=='-')&&(previousSigne>='0')&&(previousSigne<='9')) currentSigne = '#';
+        if((currentSigne=='-')&&(((prevSigne>='0')&&(prevSigne<='9'))||((nextSigne>='0')&&(nextSigne<='9')))) currentSigne = '#';
         oss << currentSigne;
-        previousSigne = currentSigne;
+        prevSigne = currentSigne;
     }
     formule = oss.str();
     LOG_VERBOSE(m_Log) << "Filtered formule " << formule;
@@ -643,14 +643,16 @@ bool xPLCalcul::MsgAnswer(xPL::SchemaObject& msg)
 
 int xPLCalcul::ServiceStart(int argc, char* argv[])
 {
+    m_bServiceStop = false;
+    if(argc > 1) m_xPLDevice.SetConfigFileName(argv[1]);
     m_xPLDevice.Open();
 
     while(!m_bServiceStop)
     {
         if(m_bServicePause)
-            Sleep(1);
+            Plateforms::delay(500);
         else
-            m_xPLDevice.WaitRecv(500000);
+            m_xPLDevice.WaitRecv(500);
     }
 
     m_xPLDevice.Close();

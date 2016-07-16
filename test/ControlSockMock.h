@@ -23,6 +23,7 @@
 #define CONTROLSOCKMOCK_H
 
 #include <iostream>
+#include <queue>
 #include <string>
 #include <mutex>
 #ifdef WIN32
@@ -43,7 +44,7 @@ class ControlSockMock
 
     private:
         static std::string m_MockRecv;
-        static std::string m_MockSend;
+        static std::queue<std::string> m_MockSend;
         static std::mutex g_MockRecvMutex;
         static std::mutex g_MockSendMutex;
 

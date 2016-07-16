@@ -18,8 +18,6 @@
     along with xPPLib.  If not, see <http://www.gnu.org/licenses/>.
 */
 /***************************************************************************************************/
-#include <iostream>
-
 #include <sstream>
 #include <algorithm>
 #include "SchemaObject.h"
@@ -48,6 +46,55 @@ SchemaObject::SchemaObject(ISchema::MsgType type, const string& schemaClass, con
 SchemaObject::~SchemaObject()
 {
 	SchemaObject::ClearSchema();
+}
+
+
+void SchemaObject::swap(SchemaObject& other)
+{
+    TargetAddress.swap(other.TargetAddress);
+    m_MsgType = other.m_MsgType;
+    std::swap(m_MsgTypeStr, other.m_MsgTypeStr);
+    m_Hop = other.m_Hop;
+    std::swap(m_Source, other.m_Source);
+    std::swap(m_SchemaClass, other.m_SchemaClass);
+    std::swap(m_SchemaType, other.m_SchemaType);
+    std::swap(m_Items, other.m_Items);
+}
+
+SchemaObject::SchemaObject(SchemaObject const& other):
+    TargetAddress{other.TargetAddress},
+    m_MsgType{other.m_MsgType},
+    m_MsgTypeStr{other.m_MsgTypeStr},
+    m_Hop{other.m_Hop},
+    m_Source{other.m_Source},
+    m_SchemaClass{other.m_SchemaClass},
+    m_SchemaType{other.m_SchemaType},
+    m_Items{other.m_Items}
+{
+}
+
+SchemaObject& SchemaObject::operator=(SchemaObject const& other)
+{
+    SchemaObject{other}.swap(*this);
+    return *this;
+}
+
+SchemaObject::SchemaObject(SchemaObject &&other)
+{
+    TargetAddress = move(other.TargetAddress);
+    m_MsgType = other.m_MsgType;
+    m_MsgTypeStr = move(other.m_MsgTypeStr);
+    m_Hop = other.m_Hop;
+    m_Source = move(other.m_Source);
+    m_SchemaClass = move(other.m_SchemaClass);
+    m_SchemaType = move(other.m_SchemaType);
+    m_Items = move(other.m_Items);
+}
+
+SchemaObject& SchemaObject::operator=(SchemaObject&& other) noexcept
+{
+   SchemaObject(move(other)).swap(*this);
+   return *this;
 }
 
 void SchemaObject::ClearSchema()
@@ -141,7 +188,6 @@ string SchemaObject::MsgTypeToString(ISchema::MsgType type)
         default :
             throw SchemaObject::Exception(0x0007, "SchemaObject::MsgTypeToString: Unknown message type (known types cmnd|stat|trig)");
     }
-    return "";
 }
 
 ISchema::MsgType SchemaObject::MsgTypeToEnum(const string& type)

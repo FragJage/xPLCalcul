@@ -18,6 +18,8 @@
     along with xPPLib.  If not, see <http://www.gnu.org/licenses/>.
 */
 /***************************************************************************************************/
+#include <iostream>
+
 #include <sstream>
 #include "Address.h"
 
@@ -28,6 +30,7 @@ using namespace std;
 
 Address::Address()
 {
+    m_All = false;
 }
 
 Address::Address(const string& vendor, const string& device, const string& instance)
@@ -42,6 +45,47 @@ Address::Address(const string& address)
 
 Address::~Address()
 {
+}
+
+void Address::swap(Address& other)
+{
+    std::swap(m_Vendor, other.m_Vendor);
+    std::swap(m_Device, other.m_Device);
+    std::swap(m_Instance, other.m_Instance);
+    std::swap(m_TempAddress, other.m_TempAddress);
+    m_All = other.m_All;
+}
+
+Address::Address(Address const& other) :
+    m_Vendor{other.m_Vendor},
+    m_Device{other.m_Device},
+    m_Instance{other.m_Instance},
+    m_TempAddress{other.m_TempAddress},
+    m_All{other.m_All}
+{
+}
+
+Address& Address::operator=(Address const& other)
+{
+    Address{other}.swap(*this);
+    return *this;
+}
+
+Address::Address(Address &&other)
+{
+    cout << "YES1" << endl;
+    m_Vendor    = move(other.m_Vendor);
+    m_Device    = move(other.m_Device);
+    m_Instance  = move(other.m_Instance);
+    m_TempAddress = move(other.m_TempAddress);
+    m_All       = other.m_All;
+}
+
+Address& Address::operator=(Address&& other) noexcept
+{
+cout << "YES2" << endl;
+   Address(move(other)).swap(*this);
+   return *this;
 }
 
 string Address::GetVendor() const

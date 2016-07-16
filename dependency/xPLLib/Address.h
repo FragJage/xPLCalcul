@@ -35,6 +35,12 @@ class Address
         Address(const std::string& address);
         ~Address();
 
+        void swap(Address& other);
+        Address(Address const& other);
+        Address& operator=(Address const& other);
+        Address(Address &&other);
+        Address& operator=(Address&& other) noexcept;
+
         std::string GetVendor() const;
         std::string GetDevice() const;
         std::string GetInstance() const;

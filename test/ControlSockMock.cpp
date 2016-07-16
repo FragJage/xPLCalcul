@@ -30,7 +30,7 @@ using namespace std;
 /***************************************************************************************************/
 
 string ControlSockMock::m_MockRecv = "";
-string ControlSockMock::m_MockSend = "";
+queue<string> ControlSockMock::m_MockSend;
 mutex ControlSockMock::g_MockRecvMutex;
 mutex ControlSockMock::g_MockSendMutex;
 
@@ -42,12 +42,16 @@ string ControlSockMock::GetLastSend(int delay)
     for(idelay=0; idelay<=delay; idelay++)
     {
         ControlSockMock::g_MockSendMutex.lock();
-        tmp = ControlSockMock::m_MockSend;
-        ControlSockMock::m_MockSend = "";
+        if(!ControlSockMock::m_MockSend.empty())
+        {
+            tmp = ControlSockMock::m_MockSend.front();
+            ControlSockMock::m_MockSend.pop();
+        }
         ControlSockMock::g_MockSendMutex.unlock();
         if(tmp!="") break;
         Plateforms::delay(100);
     }
+
     return tmp;
 }
 
@@ -61,8 +65,7 @@ void ControlSockMock::SetNextRecv(std::string value)
 void ControlSockMock::SetSend(std::string value)
 {
     ControlSockMock::g_MockSendMutex.lock();
-    ControlSockMock::m_MockSend = value;
-//cout << "WRITE " << ControlSockMock::m_MockSend << endl;
+    ControlSockMock::m_MockSend.push(value);
     ControlSockMock::g_MockSendMutex.unlock();
 }
 

@@ -46,8 +46,14 @@ class SchemaObject : public ISchema
         class Exception;
         SchemaObject();
         SchemaObject(ISchema::MsgType type, const std::string& schemaClass, const std::string& schemaType);
-
         virtual ~SchemaObject();
+
+        void swap(SchemaObject& other);
+        SchemaObject(SchemaObject const& other);
+        SchemaObject& operator=(SchemaObject const& other);
+        SchemaObject(SchemaObject &&other);
+        SchemaObject& operator=(SchemaObject&& other) noexcept;
+
         void ClearSchema();
         void ClearValues();
 

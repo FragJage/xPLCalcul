@@ -17,7 +17,7 @@
 					<Add option="-std=c++11" />
 					<Add option="-DWIN32" />
 					<Add directory="src" />
-					<Add directory="src/xPL" />
+					<Add directory="dependency" />
 				</Compiler>
 				<Linker>
 					<Add option="-s" />
@@ -64,6 +64,8 @@
 		<Unit filename="dependency/SimpleLog/SimpleLog.h" />
 		<Unit filename="dependency/SimpleLog/SimpleLog.inl" />
 		<Unit filename="dependency/SimpleSock/SimpleSock.h" />
+		<Unit filename="dependency/Thread/mingw.mutex.h" />
+		<Unit filename="dependency/Thread/mingw.thread.h" />
 		<Unit filename="dependency/UnitTest/UnitTest.cpp" />
 		<Unit filename="dependency/UnitTest/UnitTest.h" />
 		<Unit filename="dependency/UnitTest/termcolor.h" />
@@ -98,9 +100,12 @@
 		<Unit filename="src/xPLCalcul.cpp" />
 		<Unit filename="src/xPLCalcul.h" />
 		<Unit filename="test/ControlSockMock.cpp" />
+		<Unit filename="test/ControlSockMock.h" />
 		<Unit filename="test/SimpleSockMock.cpp" />
 		<Unit filename="test/TestCalcul.cpp" />
 		<Unit filename="test/TestCalcul.h" />
+		<Unit filename="test/TestxPLCalcul.cpp" />
+		<Unit filename="test/TestxPLCalcul.h" />
 		<Unit filename="test/main.cpp" />
 		<Extensions>
 			<code_completion />

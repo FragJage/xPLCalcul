@@ -1,5 +1,6 @@
 [![Build Status](https://travis-ci.org/FragJage/xPLCalcul.svg?branch=master)](https://travis-ci.org/FragJage/xPLCalcul)
 [![Coverage Status](https://coveralls.io/repos/github/FragJage/xPLCalcul/badge.svg?branch=master)](https://coveralls.io/github/FragJage/xPLCalcul?branch=master)
+[![Coverity Scan Build](https://scan.coverity.com/projects/9418/badge.svg)](https://scan.coverity.com/projects/9418)
 xPLCalcul
 ===========
 xPL daemon to set device value by calculation with other devices. 
@@ -16,12 +17,11 @@ Features
  
 Portability
 ===========
-TODO
 Unit tests passed successfully on :
  - Windows Seven (CPU Intel Celeron)
- - Linux Ubuntu (CPU Intel Atom)
+ - (TODO) Linux Ubuntu (CPU Intel Atom)
  - Linux Raspian on Raspberry Pi (CPU ARM)
- - Linux FunPlug on NAS DNS-320 (CPU ARM)
+ - (TODO) Linux FunPlug on NAS DNS-320 (CPU ARM)
 
 For more informations
 =====================
