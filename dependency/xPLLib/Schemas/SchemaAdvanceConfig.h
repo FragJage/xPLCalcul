@@ -35,6 +35,11 @@ class SchemaAdvanceConfigList : public SchemaObject
         SchemaAdvanceConfigList();
         /// \brief    Destructor of SchemaAdvanceConfigList
         ~SchemaAdvanceConfigList();
+
+        SchemaAdvanceConfigList(SchemaAdvanceConfigList const& other);
+        SchemaAdvanceConfigList& operator=(SchemaAdvanceConfigList const& other);
+        SchemaAdvanceConfigList(SchemaAdvanceConfigList &&other);
+        SchemaAdvanceConfigList& operator=(SchemaAdvanceConfigList&& other) noexcept;
 };
 
 /// \brief    Class to manage schema config.list xPL message
@@ -57,6 +62,11 @@ class SchemaAdvanceConfigCurrent : public SchemaObject
         SchemaAdvanceConfigCurrent();
         /// \brief    Destructor of SchemaAdvanceConfigCurrent
         ~SchemaAdvanceConfigCurrent();
+
+        SchemaAdvanceConfigCurrent(SchemaAdvanceConfigCurrent const& other);
+        SchemaAdvanceConfigCurrent& operator=(SchemaAdvanceConfigCurrent const& other);
+        SchemaAdvanceConfigCurrent(SchemaAdvanceConfigCurrent &&other);
+        SchemaAdvanceConfigCurrent& operator=(SchemaAdvanceConfigCurrent&& other) noexcept;
 };
 
 /// \brief    Class to manage schema config.current xPL message

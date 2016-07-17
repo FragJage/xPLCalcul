@@ -69,6 +69,11 @@ class SchemaConfigList : public SchemaObject
         SchemaConfigList();
         /// \brief    Destructor of SchemaConfigList
         ~SchemaConfigList();
+
+        SchemaConfigList(SchemaConfigList const& other);
+        SchemaConfigList& operator=(SchemaConfigList const& other);
+        SchemaConfigList(SchemaConfigList &&other);
+        SchemaConfigList& operator=(SchemaConfigList&& other) noexcept;
 };
 
 /// \brief    Class to manage schema config.current xPL message
@@ -79,6 +84,11 @@ class SchemaConfigCurrent : public SchemaObject
         SchemaConfigCurrent();
         /// \brief    Destructor of SchemaConfigCurrent
         ~SchemaConfigCurrent();
+
+        SchemaConfigCurrent(SchemaConfigCurrent const& other);
+        SchemaConfigCurrent& operator=(SchemaConfigCurrent const& other);
+        SchemaConfigCurrent(SchemaConfigCurrent &&other);
+        SchemaConfigCurrent& operator=(SchemaConfigCurrent&& other) noexcept;
 };
 
 /// \brief    Class to manage schema config.list xPL message

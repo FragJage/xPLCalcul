@@ -35,6 +35,26 @@ SchemaAdvanceConfigList::~SchemaAdvanceConfigList()
 {
 }
 
+SchemaAdvanceConfigList::SchemaAdvanceConfigList(SchemaAdvanceConfigList const& other) : SchemaObject(other)
+{
+}
+
+SchemaAdvanceConfigList& SchemaAdvanceConfigList::operator=(SchemaAdvanceConfigList const& other)
+{
+    SchemaObject::operator=(other);
+    return *this;
+}
+
+SchemaAdvanceConfigList::SchemaAdvanceConfigList(SchemaAdvanceConfigList &&other) : SchemaObject(other)
+{
+}
+
+SchemaAdvanceConfigList& SchemaAdvanceConfigList::operator=(SchemaAdvanceConfigList&& other) noexcept
+{
+    SchemaObject::operator=(other);
+    return *this;
+}
+
 /****************************************************************************************************/
 /*** Schema advanceconfig.list -> Request                                                            */
 SchemaAdvanceConfigListRequest::SchemaAdvanceConfigListRequest() : SchemaObject(ISchema::cmnd, "advanceconfig", "list")
@@ -58,6 +78,26 @@ SchemaAdvanceConfigCurrent::SchemaAdvanceConfigCurrent() : SchemaObject(ISchema:
 
 SchemaAdvanceConfigCurrent::~SchemaAdvanceConfigCurrent()
 {
+}
+
+SchemaAdvanceConfigCurrent::SchemaAdvanceConfigCurrent(SchemaAdvanceConfigCurrent const& other) : SchemaObject(other)
+{
+}
+
+SchemaAdvanceConfigCurrent& SchemaAdvanceConfigCurrent::operator=(SchemaAdvanceConfigCurrent const& other)
+{
+    SchemaObject::operator=(other);
+    return *this;
+}
+
+SchemaAdvanceConfigCurrent::SchemaAdvanceConfigCurrent(SchemaAdvanceConfigCurrent &&other) : SchemaObject(other)
+{
+}
+
+SchemaAdvanceConfigCurrent& SchemaAdvanceConfigCurrent::operator=(SchemaAdvanceConfigCurrent&& other) noexcept
+{
+    SchemaObject::operator=(other);
+    return *this;
 }
 
 /****************************************************************************************************/

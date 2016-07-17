@@ -77,6 +77,26 @@ SchemaConfigList::~SchemaConfigList()
 {
 }
 
+SchemaConfigList::SchemaConfigList(SchemaConfigList const& other) : SchemaObject(other)
+{
+}
+
+SchemaConfigList& SchemaConfigList::operator=(SchemaConfigList const& other)
+{
+    SchemaObject::operator=(other);
+    return *this;
+}
+
+SchemaConfigList::SchemaConfigList(SchemaConfigList &&other) : SchemaObject(other)
+{
+}
+
+SchemaConfigList& SchemaConfigList::operator=(SchemaConfigList&& other) noexcept
+{
+    SchemaObject::operator=(other);
+    return *this;
+}
+
 /****************************************************************************************************/
 /*** Schema config.current                                                                          */
 SchemaConfigCurrent::SchemaConfigCurrent() : SchemaObject(ISchema::stat, "config", "current")
@@ -85,6 +105,26 @@ SchemaConfigCurrent::SchemaConfigCurrent() : SchemaObject(ISchema::stat, "config
 
 SchemaConfigCurrent::~SchemaConfigCurrent()
 {
+}
+
+SchemaConfigCurrent::SchemaConfigCurrent(SchemaConfigCurrent const& other) : SchemaObject(other)
+{
+}
+
+SchemaConfigCurrent& SchemaConfigCurrent::operator=(SchemaConfigCurrent const& other)
+{
+    SchemaObject::operator=(other);
+    return *this;
+}
+
+SchemaConfigCurrent::SchemaConfigCurrent(SchemaConfigCurrent &&other) : SchemaObject(other)
+{
+}
+
+SchemaConfigCurrent& SchemaConfigCurrent::operator=(SchemaConfigCurrent&& other) noexcept
+{
+    SchemaObject::operator=(other);
+    return *this;
 }
 
 /****************************************************************************************************/
