@@ -2,7 +2,8 @@ language: cpp
 
 compiler: gcc
 env: 
-  COMPILER=g++-4.9
+  global:
+    - COMPILER=g++-4.9
   # The next declaration is the encrypted COVERITY_SCAN_TOKEN, created
   #   via the "travis encrypt" command using the project repo's public key
   - secure: "S8LI1FpGUzbXi8+ThdpsxdHcM48pTuApd/LNs+f8jBljn1aVQFrjwfcA8jpLYab3GWNfeV8PjgxhwJtK2/CP834Ckt9W+kVDDUUXB9IE2usprdvmj91hsURcy8w6XwSt8HR7HmtHKSTlgnxWF2tgOHXK+YwEC2Z68kvCqn9RVW4CbeF0nWwPZU2YwTXYh9RacmY9H3856DClr4c6xDWn0eqW6hWo4zK3A7xMIbOdVv1Put6Lq+SGgibNXQ6/V3rlAi1afGIB0ZO9CBQpQD5SVAi3pAODuheeSz5mkGYqVvRYI0glPdqKpCqSra8vkdlLwlrylzEv7qZSFjFHIixLp3fy3XX7AFzmcgcbMNHVOJ6I/1pDEHeWTQYKktDia5mrbEUFb3OBu1Qj4oPuLDDBPx3w4+4u2OUSsupqVkLd10VP+wuD0dVCwP87lHPmMv+A8CYoeccFKkAgaCKFTxV28xoUSUszgcJx4oCULJBmYgibgkDR6Mzypxszky6y5usZMHa4BgAuPz76LO9YcuroFQIH11SIwCMwDdiENu+2/1fyntAKGcxSjDqYxB+j/alejbBuGtwirIP1/ii4T17rpAstysS+XSCI/orvmv2TCyk6+FvmRsmkYjxKfNTzjVr/86Qdyn+sBUPrHd4OI09a5Ax0eHW+EPmNvxeY82yT7ag="
@@ -24,10 +25,10 @@ install:
   - pip install --user git+git://github.com/eddyxu/cpp-coveralls.git
 
 script:
-  - cmake . -G"Unix Makefiles" -DCMAKE_CXX_COMPILER=$(which $COMPILER)
-  - make
-  - ./test/bin/unittest
-  
+  - if [ "$COVERITY_SCAN_BRANCH" != 1 ]; then cmake . -G"Unix Makefiles" -DCMAKE_CXX_COMPILER=$(which $COMPILER); fi
+  - if [ "$COVERITY_SCAN_BRANCH" != 1 ]; then make; fi
+  - if [ "$COVERITY_SCAN_BRANCH" != 1 ]; then ./test/bin/unittest; fi
+
 after_success:
-  - valgrind --error-exitcode=1 --leak-check=full ./test/bin/unittest
-  - coveralls --include src --gcov-options '\-lp' --gcov 'gcov-4.9'
+  - if [ "$COVERITY_SCAN_BRANCH" != 1 ]; then valgrind --error-exitcode=1 --leak-check=full ./test/bin/unittest; fi
+  - if [ "$COVERITY_SCAN_BRANCH" != 1 ]; then coveralls --include src --gcov-options '\-lp' --gcov 'gcov-4.9'; fi
