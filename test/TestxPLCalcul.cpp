@@ -20,8 +20,11 @@ TestxPLCalcul::TestxPLCalcul() : TestClass("Counter", this)
 	addTest("CalculationSubtraction", &TestxPLCalcul::CalculationSubtraction);
     addTest("CalculationAnd", &TestxPLCalcul::CalculationAnd);
     addTest("CalculationOr", &TestxPLCalcul::CalculationOr);
+    addTest("CalculationBracket", &TestxPLCalcul::CalculationBracket);
     addTest("DelAdvConfig", &TestxPLCalcul::DelAdvConfig);
 	addTest("Stop", &TestxPLCalcul::Stop);
+	addTest("ReStart", &TestxPLCalcul::ReStart);
+	addTest("ReStop", &TestxPLCalcul::ReStop);
 }
 
 TestxPLCalcul::~TestxPLCalcul()
@@ -129,6 +132,20 @@ void TestxPLCalcul::SetDeviceValue(string device, string current, string type, s
     string msg;
     xPL::SchemaObject sch;
     xPL::SchemaObject schSensor(xPL::ISchema::trig, "sensor", "basic");
+
+
+    schSensor.SetValue("device", device);
+    schSensor.SetValue("current", current);
+    schSensor.SetValue("type", type);
+    msg = schSensor.ToMessage(source, "*");
+    ControlSockMock::SetNextRecv(msg);
+}
+
+void TestxPLCalcul::StatDeviceValue(string device, string current, string type, string source)
+{
+    string msg;
+    xPL::SchemaObject sch;
+    xPL::SchemaObject schSensor(xPL::ISchema::stat, "sensor", "basic");
 
 
     schSensor.SetValue("device", device);
@@ -331,11 +348,10 @@ bool TestxPLCalcul::CalculationAnd()
 
 bool TestxPLCalcul::CalculationOr()
 {
-    //|   timer
     string msg;
     xPL::SchemaObject sch;
 
-    SetCalculation("OperatorTest", "fragxpl-owfs.default:timer", "timer", "fragxpl-owfs.default:devalpha&fragxpl-owfs.default:devbeta");
+    SetCalculation("OperatorTest", "fragxpl-owfs.default:timer", "timer", "fragxpl-owfs.default:devalpha|fragxpl-owfs.default:devbeta");
     msg = ControlSockMock::GetLastSend(10);     //Pass the second request device value
     SetDeviceValue("timer", "stop", "timer", "fragxpl-owfs.default");
     Plateforms::delay(100);
@@ -358,6 +374,33 @@ bool TestxPLCalcul::CalculationOr()
     msg = ControlSockMock::GetLastSend(10);
     sch.Parse(msg);
     assert("stop"==sch.GetValue("current"));
+
+    return true;
+}
+
+bool TestxPLCalcul::CalculationBracket()
+{
+    string msg;
+    xPL::SchemaObject sch;
+
+    SetCalculation("OperationTest", "fragxpl-owfs.default:bracktemp", "slider", "(fragxpl-owfs.default:val1+2)*(fragxpl-owfs.default:val1-2)");
+    SetDeviceValue("bracktemp", "0", "slider", "fragxpl-owfs.default");
+    Plateforms::delay(100);
+
+    StatDeviceValue("val1", "3", "generic", "fragxpl-owfs.default");
+    msg = ControlSockMock::GetLastSend(10);
+    sch.Parse(msg);
+    assert("control"==sch.GetClass());
+    assert("basic"==sch.GetType());
+    assert("bracktemp"==sch.GetValue("device"));
+    assert("5"==sch.GetValue("current"));
+
+    StatDeviceValue("val1", "5", "generic", "fragxpl-owfs.default");    //For code coverage
+    Plateforms::delay(100);
+    SetDeviceValue("val1", "5", "generic", "fragxpl-owfs.default");
+    msg = ControlSockMock::GetLastSend(10);
+    sch.Parse(msg);
+    assert("21"==sch.GetValue("current"));
 
     return true;
 }
@@ -388,10 +431,26 @@ bool TestxPLCalcul::Stop()
     string msg;
 
     xPLDev.ServicePause(true);
+    Plateforms::delay(800);
     xPLDev.ServicePause(false);
     xPLDev.ServiceStop();
 
     msg = ControlSockMock::GetLastSend(10);     //Pass hbeat message
     Plateforms::delay(200);
+    return true;
+}
+
+bool TestxPLCalcul::ReStart()
+{
+    thread integrationTest(ThreadStart, &xPLDev);
+    integrationTest.detach();
+
+    return true;
+}
+
+bool TestxPLCalcul::ReStop()
+{
+    xPLDev.ServiceStop();
+    remove("config");
     return true;
 }

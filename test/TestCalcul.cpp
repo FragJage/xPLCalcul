@@ -35,14 +35,21 @@ bool TestCalcul::SetCalcul()
 bool TestCalcul::SetCache()
 {
     Calcul myCalcul("EvaluateNight", "fragxpl-fictif.default:night", "output", "fragxpl-owfs.default:brightness<10");
-    CacheDevice cache1();
+    CacheDevice cache1;
     CacheDevice cache2(&myCalcul);
+
+    assert(false==cache1.m_Lu);
+    assert(false==cache2.m_Lu);
     return true;
 }
 
 bool TestCalcul::SetParser()
 {
-    CalculParser parser1();
+    CalculParser parser1;
     CalculParser parser2("fragxpl-fictif.default:night", 1, 31);
+
+
+    assert(""==parser1.m_Device);
+    assert("fragxpl-fictif.default:night"==parser2.m_Device);
     return true;
 }

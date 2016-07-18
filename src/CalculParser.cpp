@@ -5,6 +5,9 @@ using namespace std;
 
 CalculParser::CalculParser()
 {
+    m_Device = "";
+    m_Deb = 0;
+    m_Fin = 0;
 }
 
 CalculParser::CalculParser(const string& device, size_t deb, size_t fin)

@@ -28,10 +28,14 @@ public:
     bool CalculationSubtraction();
     bool CalculationAnd();
     bool CalculationOr();
+    bool CalculationBracket();
     bool DelAdvConfig();
     bool Stop();
+    bool ReStart();
+    bool ReStop();
     xPLCalcul xPLDev;
 private:
     void SetCalculation(string name, string device, string type, string formula);
     void SetDeviceValue(string device, string current, string type, string source);
+    void StatDeviceValue(string device, string current, string type, string source);
 };
