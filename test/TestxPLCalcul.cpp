@@ -21,9 +21,9 @@ TestxPLCalcul::TestxPLCalcul() : TestClass("Counter", this)
     addTest("CalculationAnd", &TestxPLCalcul::CalculationAnd);
     addTest("CalculationOr", &TestxPLCalcul::CalculationOr);
     addTest("CalculationBracket", &TestxPLCalcul::CalculationBracket);
-    addTest("DelAdvConfig", &TestxPLCalcul::DelAdvConfig);
 	addTest("Stop", &TestxPLCalcul::Stop);
 	addTest("ReStart", &TestxPLCalcul::ReStart);
+    addTest("DelAdvConfig", &TestxPLCalcul::DelAdvConfig);
 	addTest("ReStop", &TestxPLCalcul::ReStop);
 }
 
@@ -405,6 +405,36 @@ bool TestxPLCalcul::CalculationBracket()
     return true;
 }
 
+bool TestxPLCalcul::Stop()
+{
+    string msg;
+    xPL::SchemaObject sch;
+
+    xPLDev.ServicePause(true);
+    Plateforms::delay(800);
+    xPLDev.ServicePause(false);
+    xPLDev.ServiceStop();
+
+    msg = ControlSockMock::GetLastSend(10);     //Pass hbeat message
+    sch.Parse(msg);
+    assert("hbeat"==sch.GetClass());
+    assert("end"==sch.GetType());
+    Plateforms::delay(200);
+    return true;
+}
+
+bool TestxPLCalcul::ReStart()
+{
+    string msg;
+
+    thread integrationTest(ThreadStart, &xPLDev);
+    integrationTest.detach();
+
+    for(int i=0;i<13;i++) msg = ControlSockMock::GetLastSend(10);   //Pass message
+
+    return true;
+}
+
 bool TestxPLCalcul::DelAdvConfig()
 {
     string msg;
@@ -426,31 +456,20 @@ bool TestxPLCalcul::DelAdvConfig()
     return true;
 }
 
-bool TestxPLCalcul::Stop()
-{
-    string msg;
-
-    xPLDev.ServicePause(true);
-    Plateforms::delay(800);
-    xPLDev.ServicePause(false);
-    xPLDev.ServiceStop();
-
-    msg = ControlSockMock::GetLastSend(10);     //Pass hbeat message
-    Plateforms::delay(200);
-    return true;
-}
-
-bool TestxPLCalcul::ReStart()
-{
-    thread integrationTest(ThreadStart, &xPLDev);
-    integrationTest.detach();
-
-    return true;
-}
-
 bool TestxPLCalcul::ReStop()
 {
+    string msg;
+    xPL::SchemaObject sch;
+
+
     xPLDev.ServiceStop();
+
+    msg = ControlSockMock::GetLastSend(10);
+    sch.Parse(msg);
+    assert("hbeat"==sch.GetClass());
+    assert("end"==sch.GetType());
+    Plateforms::delay(200);
+
     remove("config");
     return true;
 }
