@@ -6,6 +6,7 @@ using namespace std;
 
 Calcul::Calcul()
 {
+    m_Name = "";
 }
 
 Calcul::Calcul(const string& name, const string& device, const string& type, const string& formula)

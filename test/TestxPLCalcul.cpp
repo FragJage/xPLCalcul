@@ -396,7 +396,7 @@ bool TestxPLCalcul::CalculationBracket()
     assert("5"==sch.GetValue("current"));
 
     StatDeviceValue("val1", "5", "generic", "fragxpl-owfs.default");    //For code coverage
-    Plateforms::delay(100);
+    Plateforms::delay(600);
     SetDeviceValue("val1", "5", "generic", "fragxpl-owfs.default");
     msg = ControlSockMock::GetLastSend(10);
     sch.Parse(msg);
