@@ -7,6 +7,12 @@ using namespace std;
 Calcul::Calcul()
 {
     m_Name = "";
+    m_TypeEnum = xPL::SchemaControlBasic::controlType::manual;
+    m_TypeStr = "manual";
+    m_CanonicDevice = "";
+    m_Formula = "";
+    m_ModuleName = "";
+    m_DeviceName = "";
 }
 
 Calcul::Calcul(const string& name, const string& device, const string& type, const string& formula)

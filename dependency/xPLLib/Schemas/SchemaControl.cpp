@@ -33,6 +33,7 @@ const vector<string> SchemaControlBasic::m_FlagSet({"set", "clear", "neutral"});
 
 SchemaControlBasic::SchemaControlBasic() : SchemaObject(ISchema::cmnd, "control", "basic")
 {
+    m_deviceType = controlType::manual;
 }
 
 SchemaControlBasic::SchemaControlBasic(string name, controlType type) : SchemaObject(ISchema::cmnd, "control", "basic")
