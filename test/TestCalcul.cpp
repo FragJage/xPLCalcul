@@ -19,8 +19,10 @@ TestCalcul::~TestCalcul()
 
 bool TestCalcul::SetCalcul()
 {
+    Calcul myCalculSimple;
     Calcul myCalcul("EvaluateNight", "fragxpl-fictif.default:night", "output", "fragxpl-owfs.default:brightness<10");
 
+    assert(""==myCalculSimple.m_Name);
     assert("EvaluateNight"==myCalcul.m_Name);
     assert("fragxpl-fictif.default:night"==myCalcul.m_CanonicDevice);
     assert("output"==myCalcul.m_TypeStr);
