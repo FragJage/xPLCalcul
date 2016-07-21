@@ -46,7 +46,6 @@ class TestClass : public ITestClass
 			bool result = true;
 			ios::fmtflags oldFmt(cout.flags());
 
-
       padLenght = m_ClassName.length();
 			for(i=0; i<imax; i++)
 			{
