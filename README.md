@@ -19,7 +19,7 @@ Portability
 ===========
 Unit tests passed successfully on :
  - Windows Seven (CPU Intel Celeron)
- - (TODO) Linux Ubuntu (CPU Intel Atom)
+ - Linux Ubuntu (CPU Intel Atom)
  - Linux Raspian on Raspberry Pi (CPU ARM)
 
 For more informations
