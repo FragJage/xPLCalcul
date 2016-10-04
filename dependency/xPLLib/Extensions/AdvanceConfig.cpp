@@ -18,7 +18,6 @@
     along with xPPLib.  If not, see <http://www.gnu.org/licenses/>.
 */
 /***************************************************************************************************/
-
 #include "AdvanceConfig.h"
 namespace xPL
 {

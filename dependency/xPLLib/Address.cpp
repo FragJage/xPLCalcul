@@ -18,8 +18,6 @@
     along with xPPLib.  If not, see <http://www.gnu.org/licenses/>.
 */
 /***************************************************************************************************/
-#include <iostream>
-
 #include <sstream>
 #include "Address.h"
 
@@ -73,7 +71,6 @@ Address& Address::operator=(Address const& other)
 
 Address::Address(Address &&other)
 {
-    cout << "YES1" << endl;
     m_Vendor    = move(other.m_Vendor);
     m_Device    = move(other.m_Device);
     m_Instance  = move(other.m_Instance);
@@ -83,7 +80,6 @@ Address::Address(Address &&other)
 
 Address& Address::operator=(Address&& other) noexcept
 {
-cout << "YES2" << endl;
    Address(move(other)).swap(*this);
    return *this;
 }

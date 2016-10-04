@@ -19,6 +19,7 @@
 */
 /***************************************************************************************************/
 
+#include "StringTools/StringTools.h"
 #include "SchemaControl.h"
 
 namespace xPL
@@ -85,7 +86,7 @@ SchemaControlBasic::controlType SchemaControlBasic::ToDeviceType(string type)
 
 
     for(i=0; i<SchemaControlBasic::m_TypeString.size(); i++)
-        if(m_TypeString[i]==type) return (controlType)i;
+        if(StringTools::IsEqualCaseInsensitive(m_TypeString[i],type)==true) return (controlType)i;
 
     return controlType::manual;
 }
@@ -97,7 +98,10 @@ void SchemaControlBasic::SetFlag(flagSet value)
 
 void SchemaControlBasic::SetCurrent(string current)
 {
-    SetValue("current", current);
+    if(m_deviceType!=manual)
+        SetValue("current", StringTools::ToLower(current));
+    else
+        SetValue("current", current);
 }
 
 string SchemaControlBasic::GetCurrent()

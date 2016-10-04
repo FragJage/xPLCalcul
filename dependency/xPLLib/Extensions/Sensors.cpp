@@ -217,7 +217,7 @@ bool Sensors::ModifyMessage(string device, string value, string type)
     if(pMessage==nullptr) return false;
 
     pMessage->SetValue("current", value);
-    if(type!="") pMessage->SetType(type);
+    if(type!="") pMessage->SetValue("type", type);  //Utilisé dans xPLFictif::ConfigChange
 
     pMessage->SetMsgType(ISchema::trig);
     m_xPLDevice->SendMessage(pMessage, "*");
