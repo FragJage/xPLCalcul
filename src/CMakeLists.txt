@@ -80,5 +80,5 @@ add_executable(
 
 #Spécification WIN32
 if(WIN32)
-  target_link_libraries(xPLChrono ws2_32)
+  target_link_libraries(xPLCalcul ws2_32)
 endif()
