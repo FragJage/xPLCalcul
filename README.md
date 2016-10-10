@@ -1,5 +1,5 @@
 [![Build Status](https://travis-ci.org/FragJage/xPLCalcul.svg?branch=master)](https://travis-ci.org/FragJage/xPLCalcul)
-[![Coverage Status](https://coveralls.io/repos/github/FragJage/xPLCalcul/badge.svg?branch=master)](https://coveralls.io/github/FragJage/xPLCalcul?branch=master)
+[![Coverage Status](https://coveralls.io/repos/github/FragJage/xPLCalcul/badge.svg?branch=master&bust=1)](https://coveralls.io/github/FragJage/xPLCalcul?branch=master)
 [![Coverity Scan Build](https://scan.coverity.com/projects/9418/badge.svg)](https://scan.coverity.com/projects/9418)
 xPLCalcul
 ===========
