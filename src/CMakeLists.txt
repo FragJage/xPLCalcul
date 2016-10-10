@@ -55,6 +55,12 @@ file(
 
 file(
   GLOB_RECURSE
+  StringTools_files
+  ../dependency/StringTools/*
+)
+
+file(
+  GLOB_RECURSE
   xPLLib_files
   ../dependency/xPLLib/*
 )
@@ -70,6 +76,7 @@ add_executable(
   ${SimpleIni_files}
   ${SimpleLog_files}
   ${SimpleSock_files}
+  ${StringTools_files}
   ${xPLLib_files}
   xPLCalcul.cpp
   Calcul.cpp
