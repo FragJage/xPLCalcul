@@ -64,6 +64,8 @@
 		<Unit filename="dependency/SimpleLog/SimpleLog.h" />
 		<Unit filename="dependency/SimpleLog/SimpleLog.inl" />
 		<Unit filename="dependency/SimpleSock/SimpleSock.h" />
+		<Unit filename="dependency/StringTools/StringTools.cpp" />
+		<Unit filename="dependency/StringTools/StringTools.h" />
 		<Unit filename="dependency/Thread/mingw.mutex.h" />
 		<Unit filename="dependency/Thread/mingw.thread.h" />
 		<Unit filename="dependency/UnitTest/UnitTest.cpp" />
