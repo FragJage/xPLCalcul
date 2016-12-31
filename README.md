@@ -1,13 +1,14 @@
 [![Build Status](https://travis-ci.org/FragJage/xPLCalcul.svg?branch=master)](https://travis-ci.org/FragJage/xPLCalcul)
-[![Coverage Status](https://coveralls.io/repos/github/FragJage/xPLCalcul/badge.svg?branch=master&bust=1)](https://coveralls.io/github/FragJage/xPLCalcul?branch=master)
+[![Coverage Status](https://coveralls.io/repos/github/FragJage/xPLCalcul/badge.svg?branch=master&bust=2)](https://coveralls.io/github/FragJage/xPLCalcul?branch=master)
 [![Coverity Scan Build](https://scan.coverity.com/projects/9418/badge.svg)](https://scan.coverity.com/projects/9418)
 xPLCalcul
-===========
-xPL daemon to set device value by calculation with other devices. 
+=========
+xPL daemon to set device value by calculation with other devices.
+More informations on the wiki (in french).
 
 Introduction
 ============
-This daemon set device's value in calculated with the value of one or more other device 
+This daemon set device's value in calculated with the value of one or more other xPL devices
 
 Features
 ========
@@ -22,10 +23,12 @@ Unit tests passed successfully on :
  - Linux Ubuntu (CPU Intel Atom)
  - Linux Raspian on Raspberry Pi (CPU ARM)
 
-For more informations
-=====================
-TODO
-See documentation in doc/html/index.html
+Quality developpment
+====================
+ - Test succesful build on travis
+ - Launch unit tests on each git push
+ - Code coverage control
+ - Coverity Scan analysis
 
 Licence
 =======
