@@ -100,7 +100,8 @@ SchemaObject& SchemaObject::operator=(SchemaObject&& other) noexcept
 void SchemaObject::ClearSchema()
 {
     SetHop(1);
-    SetMsgType(SchemaObject::stat);
+    m_MsgType = SchemaObject::stat;
+    m_MsgTypeStr = "xpl-stat";
     SetClass("");
     SetType("");
 	ClearValues();
