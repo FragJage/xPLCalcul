@@ -25,10 +25,15 @@ TestxPLCalcul::TestxPLCalcul() : TestClass("Counter", this)
 	addTest("ReStart", &TestxPLCalcul::ReStart);
     addTest("DelAdvConfig", &TestxPLCalcul::DelAdvConfig);
 	addTest("ReStop", &TestxPLCalcul::ReStop);
+
+    if(remove("config")==0)
+        cout << termcolor::yellow << "Remove old config file" << endl << termcolor::grey;
 }
 
 TestxPLCalcul::~TestxPLCalcul()
 {
+    if(remove("config")!=0)
+        cout << termcolor::red << "Unable to remove config file" << endl << termcolor::grey;
 }
 
 void TestxPLCalcul::ThreadStart(xPLCalcul* pxPLDev)
@@ -47,12 +52,10 @@ bool TestxPLCalcul::Start()
     string msg;
     xPL::SchemaObject sch;
 
-    remove("config");
-
     thread integrationTest(ThreadStart, &xPLDev);
     integrationTest.detach();
 
-    msg = ControlSockMock::GetLastSend(10);
+    msg = SimpleSockUDP::GetLastSend(10);
     sch.Parse(msg);
     assert("xPL Calcul"==sch.GetValue("appname"));
 
@@ -68,10 +71,10 @@ bool TestxPLCalcul::StdConfig()
     schCfg.SetValue("interval", "25");
     schCfg.SetValue("newconf", "test");
     msg = schCfg.ToMessage("fragxpl-test.default", "fragxpl-calcul.default");
-    ControlSockMock::SetNextRecv(msg);
+    SimpleSockUDP::SetNextRecv(msg);
 
-    msg = ControlSockMock::GetLastSend(10);     //Pass Hbeat message
-    msg = ControlSockMock::GetLastSend(10);
+    msg = SimpleSockUDP::GetLastSend(10);     //Pass Hbeat message
+    msg = SimpleSockUDP::GetLastSend(10);
     sch.Parse(msg);
     assert("25"==sch.GetValue("interval"));
     assert("fragxpl-calcul.test"==sch.GetSource());
@@ -90,9 +93,9 @@ bool TestxPLCalcul::SetAdvConfig()
     schAdvCfg.SetValue("type", "output");
     schAdvCfg.SetValue("formula", "fragxpl-owfs.default:brightness<10");
     msg = schAdvCfg.ToMessage("fragxpl-test.default", "fragxpl-calcul.test");
-    ControlSockMock::SetNextRecv(msg);
+    SimpleSockUDP::SetNextRecv(msg);
 
-    msg = ControlSockMock::GetLastSend(10);
+    msg = SimpleSockUDP::GetLastSend(10);
     sch.Parse(msg);
     assert("fragxpl-owfs.default"==sch.TargetAddress.ToString());
     assert("sensor"==sch.GetClass());
@@ -100,7 +103,7 @@ bool TestxPLCalcul::SetAdvConfig()
     assert("current"==sch.GetValue("request"));
     assert("brightness"==sch.GetValue("device"));
 
-    msg = ControlSockMock::GetLastSend(10);
+    msg = SimpleSockUDP::GetLastSend(10);
     sch.Parse(msg);
     assert("fragxpl-fictif.default"==sch.TargetAddress.ToString());
     assert("sensor"==sch.GetClass());
@@ -121,10 +124,10 @@ void TestxPLCalcul::SetCalculation(string name, string device, string type, stri
     schAdvCfg.SetValue("type", type);
     schAdvCfg.SetValue("formula", formula);
     msg = schAdvCfg.ToMessage("fragxpl-test.default", "fragxpl-calcul.test");
-    ControlSockMock::SetNextRecv(msg);
+    SimpleSockUDP::SetNextRecv(msg);
 
-    msg = ControlSockMock::GetLastSend(10);     //Pass output device request
-    msg = ControlSockMock::GetLastSend(10);     //Pass formula device request
+    msg = SimpleSockUDP::GetLastSend(10);     //Pass output device request
+    msg = SimpleSockUDP::GetLastSend(10);     //Pass formula device request
 }
 
 void TestxPLCalcul::SetDeviceValue(string device, string current, string type, string source)
@@ -138,7 +141,7 @@ void TestxPLCalcul::SetDeviceValue(string device, string current, string type, s
     schSensor.SetValue("current", current);
     schSensor.SetValue("type", type);
     msg = schSensor.ToMessage(source, "*");
-    ControlSockMock::SetNextRecv(msg);
+    SimpleSockUDP::SetNextRecv(msg);
 }
 
 void TestxPLCalcul::StatDeviceValue(string device, string current, string type, string source)
@@ -152,7 +155,7 @@ void TestxPLCalcul::StatDeviceValue(string device, string current, string type, 
     schSensor.SetValue("current", current);
     schSensor.SetValue("type", type);
     msg = schSensor.ToMessage(source, "*");
-    ControlSockMock::SetNextRecv(msg);
+    SimpleSockUDP::SetNextRecv(msg);
 }
 
 bool TestxPLCalcul::CalculationInferior()
@@ -166,7 +169,7 @@ bool TestxPLCalcul::CalculationInferior()
     Plateforms::delay(100);
 
     SetDeviceValue("brightness", "9", "illuminance", "fragxpl-owfs.default");
-    msg = ControlSockMock::GetLastSend(10);
+    msg = SimpleSockUDP::GetLastSend(10);
     sch.Parse(msg);
     assert("control"==sch.GetClass());
     assert("basic"==sch.GetType());
@@ -174,7 +177,7 @@ bool TestxPLCalcul::CalculationInferior()
     assert("high"==sch.GetValue("current"));
 
     SetDeviceValue("brightness", "11", "illuminance", "fragxpl-owfs.default");
-    msg = ControlSockMock::GetLastSend(10);
+    msg = SimpleSockUDP::GetLastSend(10);
     sch.Parse(msg);
     assert("low"==sch.GetValue("current"));
 
@@ -191,7 +194,7 @@ bool TestxPLCalcul::CalculationSuperior()
     Plateforms::delay(100);
 
     SetDeviceValue("temperature", "51", "temp", "fragxpl-owfs.default");
-    msg = ControlSockMock::GetLastSend(10);
+    msg = SimpleSockUDP::GetLastSend(10);
     sch.Parse(msg);
     assert("control"==sch.GetClass());
     assert("basic"==sch.GetType());
@@ -199,7 +202,7 @@ bool TestxPLCalcul::CalculationSuperior()
     assert("set"==sch.GetValue("current"));
 
     SetDeviceValue("temperature", "49", "temp", "fragxpl-owfs.default");
-    msg = ControlSockMock::GetLastSend(10);
+    msg = SimpleSockUDP::GetLastSend(10);
     sch.Parse(msg);
     assert("neutral"==sch.GetValue("current"));
 
@@ -216,7 +219,7 @@ bool TestxPLCalcul::CalculationMultiplication()
     Plateforms::delay(100);
 
     SetDeviceValue("stress", "5", "temp", "fragxpl-owfs.default");
-    msg = ControlSockMock::GetLastSend(10);
+    msg = SimpleSockUDP::GetLastSend(10);
     sch.Parse(msg);
     assert("control"==sch.GetClass());
     assert("basic"==sch.GetType());
@@ -224,7 +227,7 @@ bool TestxPLCalcul::CalculationMultiplication()
     assert("enable"==sch.GetValue("current"));
 
     SetDeviceValue("stress", "-1", "temp", "fragxpl-owfs.default");
-    msg = ControlSockMock::GetLastSend(10);
+    msg = SimpleSockUDP::GetLastSend(10);
     sch.Parse(msg);
     assert("disable"==sch.GetValue("current"));
 
@@ -241,7 +244,7 @@ bool TestxPLCalcul::CalculationDivision()
     Plateforms::delay(100);
 
     SetDeviceValue("tempmacro", "5", "temp", "fragxpl-owfs.default");
-    msg = ControlSockMock::GetLastSend(10);
+    msg = SimpleSockUDP::GetLastSend(10);
     sch.Parse(msg);
     assert("control"==sch.GetClass());
     assert("basic"==sch.GetType());
@@ -249,12 +252,12 @@ bool TestxPLCalcul::CalculationDivision()
     assert("enable"==sch.GetValue("current"));
 
     SetDeviceValue("tempmacro", "-1", "temp", "fragxpl-owfs.default");
-    msg = ControlSockMock::GetLastSend(10);
+    msg = SimpleSockUDP::GetLastSend(10);
     sch.Parse(msg);
     assert("disable"==sch.GetValue("current"));
 
     SetDeviceValue("tempmacro", "0", "temp", "fragxpl-owfs.default");
-    msg = ControlSockMock::GetLastSend(10);
+    msg = SimpleSockUDP::GetLastSend(10);
     sch.Parse(msg);
     assert("do"==sch.GetValue("current"));
 
@@ -272,7 +275,7 @@ bool TestxPLCalcul::CalculationAddition()
     Plateforms::delay(100);
 
     SetDeviceValue("speed", "5", "speed", "fragxpl-owfs.default");
-    msg = ControlSockMock::GetLastSend(10);
+    msg = SimpleSockUDP::GetLastSend(10);
     sch.Parse(msg);
     assert("control"==sch.GetClass());
     assert("basic"==sch.GetType());
@@ -280,7 +283,7 @@ bool TestxPLCalcul::CalculationAddition()
     assert("yes"==sch.GetValue("current"));
 
     SetDeviceValue("speed", "-11", "temp", "fragxpl-owfs.default");
-    msg = ControlSockMock::GetLastSend(10);
+    msg = SimpleSockUDP::GetLastSend(10);
     sch.Parse(msg);
     assert("no"==sch.GetValue("current"));
 
@@ -297,7 +300,7 @@ bool TestxPLCalcul::CalculationSubtraction()
     Plateforms::delay(100);
 
     SetDeviceValue("value", "30", "generic", "fragxpl-owfs.default");
-    msg = ControlSockMock::GetLastSend(10);
+    msg = SimpleSockUDP::GetLastSend(10);
     sch.Parse(msg);
     assert("control"==sch.GetClass());
     assert("basic"==sch.GetType());
@@ -305,12 +308,12 @@ bool TestxPLCalcul::CalculationSubtraction()
     assert("enable"==sch.GetValue("current"));
 
     SetDeviceValue("value", "2", "generic", "fragxpl-owfs.default");
-    msg = ControlSockMock::GetLastSend(10);
+    msg = SimpleSockUDP::GetLastSend(10);
     sch.Parse(msg);
     assert("started"==sch.GetValue("current"));
 
     SetDeviceValue("value", "1", "generic", "fragxpl-owfs.default");
-    msg = ControlSockMock::GetLastSend(10);
+    msg = SimpleSockUDP::GetLastSend(10);
     sch.Parse(msg);
     assert("disable"==sch.GetValue("current"));
 
@@ -323,7 +326,7 @@ bool TestxPLCalcul::CalculationAnd()
     xPL::SchemaObject sch;
 
     SetCalculation("OperatorTest", "fragxpl-owfs.default:sched", "scheduled", "fragxpl-owfs.default:startone&fragxpl-owfs.default:starttwo");
-    msg = ControlSockMock::GetLastSend(10);     //Pass the second request device value
+    msg = SimpleSockUDP::GetLastSend(10);     //Pass the second request device value
     SetDeviceValue("sched", "disable", "scheduled", "fragxpl-owfs.default");
     Plateforms::delay(100);
 
@@ -331,7 +334,7 @@ bool TestxPLCalcul::CalculationAnd()
     Plateforms::delay(500);
     SetDeviceValue("starttwo", "high", "output", "fragxpl-owfs.default");
     Plateforms::delay(500);
-    msg = ControlSockMock::GetLastSend(10);
+    msg = SimpleSockUDP::GetLastSend(10);
     sch.Parse(msg);
     assert("control"==sch.GetClass());
     assert("basic"==sch.GetType());
@@ -339,7 +342,7 @@ bool TestxPLCalcul::CalculationAnd()
     assert("enable"==sch.GetValue("current"));
 
     SetDeviceValue("startone", "low", "output", "fragxpl-owfs.default");
-    msg = ControlSockMock::GetLastSend(10);
+    msg = SimpleSockUDP::GetLastSend(10);
     sch.Parse(msg);
     assert("started"==sch.GetValue("current"));
 
@@ -352,7 +355,7 @@ bool TestxPLCalcul::CalculationOr()
     xPL::SchemaObject sch;
 
     SetCalculation("OperatorTest", "fragxpl-owfs.default:timer", "timer", "fragxpl-owfs.default:devalpha|fragxpl-owfs.default:devbeta");
-    msg = ControlSockMock::GetLastSend(10);     //Pass the second request device value
+    msg = SimpleSockUDP::GetLastSend(10);     //Pass the second request device value
     SetDeviceValue("timer", "stop", "timer", "fragxpl-owfs.default");
     Plateforms::delay(100);
 
@@ -360,7 +363,7 @@ bool TestxPLCalcul::CalculationOr()
     Plateforms::delay(500);
     SetDeviceValue("devbeta", "high", "output", "fragxpl-owfs.default");
     Plateforms::delay(500);
-    msg = ControlSockMock::GetLastSend(10);
+    msg = SimpleSockUDP::GetLastSend(10);
     sch.Parse(msg);
     assert("control"==sch.GetClass());
     assert("basic"==sch.GetType());
@@ -371,7 +374,7 @@ bool TestxPLCalcul::CalculationOr()
     Plateforms::delay(500);
     SetDeviceValue("devbeta", "low", "output", "fragxpl-owfs.default");
     Plateforms::delay(500);
-    msg = ControlSockMock::GetLastSend(10);
+    msg = SimpleSockUDP::GetLastSend(10);
     sch.Parse(msg);
     assert("stop"==sch.GetValue("current"));
 
@@ -388,7 +391,7 @@ bool TestxPLCalcul::CalculationBracket()
     Plateforms::delay(100);
 
     StatDeviceValue("val1", "3", "generic", "fragxpl-owfs.default");
-    msg = ControlSockMock::GetLastSend(10);
+    msg = SimpleSockUDP::GetLastSend(10);
     sch.Parse(msg);
     assert("control"==sch.GetClass());
     assert("basic"==sch.GetType());
@@ -398,7 +401,7 @@ bool TestxPLCalcul::CalculationBracket()
     StatDeviceValue("val1", "5", "generic", "fragxpl-owfs.default");    //For code coverage
     Plateforms::delay(600);
     SetDeviceValue("val1", "5", "generic", "fragxpl-owfs.default");
-    msg = ControlSockMock::GetLastSend(10);
+    msg = SimpleSockUDP::GetLastSend(10);
     sch.Parse(msg);
     assert("21"==sch.GetValue("current"));
 
@@ -415,7 +418,7 @@ bool TestxPLCalcul::Stop()
     xPLDev.ServicePause(false);
     xPLDev.ServiceStop();
 
-    msg = ControlSockMock::GetLastSend(10);     //Pass hbeat message
+    msg = SimpleSockUDP::GetLastSend(10);     //Pass hbeat message
     sch.Parse(msg);
     assert("hbeat"==sch.GetClass());
     assert("end"==sch.GetType());
@@ -430,7 +433,7 @@ bool TestxPLCalcul::ReStart()
     thread integrationTest(ThreadStart, &xPLDev);
     integrationTest.detach();
 
-    for(int i=0;i<13;i++) msg = ControlSockMock::GetLastSend(10);   //Pass message
+    for(int i=0;i<13;i++) msg = SimpleSockUDP::GetLastSend(10);   //Pass message
 
     return true;
 }
@@ -444,13 +447,13 @@ bool TestxPLCalcul::DelAdvConfig()
     schAdvCfg.SetValue("command", "delete");
     schAdvCfg.SetValue("configname", "EvaluateNight");
     msg = schAdvCfg.ToMessage("fragxpl-test.default", "fragxpl-calcul.test");
-    ControlSockMock::SetNextRecv(msg);
+    SimpleSockUDP::SetNextRecv(msg);
     Plateforms::delay(500);
 
     schAdvCfg.ClearValues();
     schAdvCfg.SetValue("command", "delete");
     msg = schAdvCfg.ToMessage("fragxpl-test.default", "fragxpl-calcul.test");
-    ControlSockMock::SetNextRecv(msg);
+    SimpleSockUDP::SetNextRecv(msg);
     Plateforms::delay(500);
 
     return true;
@@ -464,12 +467,11 @@ bool TestxPLCalcul::ReStop()
 
     xPLDev.ServiceStop();
 
-    msg = ControlSockMock::GetLastSend(10);
+    msg = SimpleSockUDP::GetLastSend(10);
     sch.Parse(msg);
     assert("hbeat"==sch.GetClass());
     assert("end"==sch.GetType());
     Plateforms::delay(200);
 
-    remove("config");
     return true;
 }

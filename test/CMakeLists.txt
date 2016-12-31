@@ -56,6 +56,12 @@ file(
 
 file(
   GLOB_RECURSE
+  SimpleSock_files
+  ../dependency/SimpleSock/*
+)
+
+file(
+  GLOB_RECURSE
   Thread_files
   ../dependency/Thread/*
 )
@@ -78,6 +84,8 @@ file(
   ../dependency/xPLLib/*
 )
 
+add_definitions( -DSIMPLESOCKUDP_MOCK )
+
 #Déclaration de l'exécutable
 set(EXECUTABLE_OUTPUT_PATH bin/${CMAKE_BUILD_TYPE})
 add_executable(
@@ -88,6 +96,7 @@ add_executable(
   ${SimpleFolders_files}
   ${SimpleIni_files}
   ${SimpleLog_files}
+  ${SimpleSock_files}
   ${Thread_files}
   ${UnitTest_files}
   ${StringTools_files}
@@ -96,9 +105,7 @@ add_executable(
   ../src/Calcul.cpp
   ../src/CalculParser.cpp
   ../src/CacheDevice.cpp
-  ControlSockMock.cpp
   main.cpp
-  SimpleSockMock.cpp
   TestCalcul.cpp
   TestxPLCalcul.cpp
 )

@@ -41,12 +41,12 @@ xPLDevice::xPLDevice()
 
 xPLDevice::xPLDevice(const string& vendor, const string& device)
 {
-	 Initialisation(vendor, device, "default");
+    Initialisation(vendor, device, "default");
 }
 
 xPLDevice::xPLDevice(const string& vendor, const string& device, const string& instance)
 {
-	 Initialisation(vendor, device, instance);
+    Initialisation(vendor, device, instance);
 }
 
 void xPLDevice::Initialisation(const std::string& vendor, const std::string& device, const std::string& instance)
@@ -744,7 +744,10 @@ bool xPLDevice::LoadConfig()
 
     iniFile.SetOptions(iniFile.Comment, "#");
     if(!iniFile.Load(configFileName))
+    {
+        LOG_INFO(m_Log) << "Unable to open config file.";
         return false;
+    }
 
     m_bLoadConfig = true;
 

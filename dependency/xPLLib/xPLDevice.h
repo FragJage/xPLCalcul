@@ -74,7 +74,7 @@
 #include <fstream>
 #include <sstream>
 #include <vector>
-#include "SimpleSock/SimpleSock.h"
+#include "SimpleSock/SimpleSockUDP.h"
 #include "SimpleLog/SimpleLog.h"
 #include "SimpleIni/SimpleIni.h"
 #include "xPLLib/Address.h"

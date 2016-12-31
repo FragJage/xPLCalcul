@@ -6,7 +6,6 @@
     #include <thread>
 #endif
 #include "../src/xPLCalcul.h"
-#include "ControlSockMock.h"
 
 using namespace std;
 

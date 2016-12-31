@@ -48,6 +48,8 @@
 			<Add option="-fexceptions" />
 			<Add directory="xPLLib/src" />
 		</Compiler>
+		<Unit filename="dependency/Plateforms/Plateforms.cpp" />
+		<Unit filename="dependency/Plateforms/Plateforms.h" />
 		<Unit filename="dependency/SafeFunctions/SafeFunctions.cpp" />
 		<Unit filename="dependency/SafeFunctions/SafeFunctions.h" />
 		<Unit filename="dependency/Service/Service.cpp" />
@@ -61,6 +63,8 @@
 		<Unit filename="dependency/SimpleLog/SimpleLog.inl" />
 		<Unit filename="dependency/SimpleSock/SimpleSock.cpp" />
 		<Unit filename="dependency/SimpleSock/SimpleSock.h" />
+		<Unit filename="dependency/SimpleSock/SimpleSockUDP.cpp" />
+		<Unit filename="dependency/SimpleSock/SimpleSockUDP.h" />
 		<Unit filename="dependency/StringTools/StringTools.cpp" />
 		<Unit filename="dependency/StringTools/StringTools.h" />
 		<Unit filename="dependency/xPLLib/Address.cpp" />

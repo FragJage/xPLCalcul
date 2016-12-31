@@ -17,7 +17,7 @@ addons:
       name: "FragJage/xPLCalcul"
       description: "xPL daemon to set device value by calculation with other devices"
     notification_email: inscrip.jage@free.fr
-    build_command_prepend: "cov-configure --comptype g++ --compiler $(which $COMPILER) && cmake . -G'Unix Makefiles' -DCMAKE_CXX_COMPILER=$(which $COMPILER)"
+    build_command_prepend: "cov-configure --comptype g++ --compiler $COMPILER --template && cmake . -G'Unix Makefiles' -DCMAKE_CXX_COMPILER=$(which $COMPILER)"
     build_command: "make"
     branch_pattern: coverity_branch
     
@@ -28,7 +28,7 @@ script:
   - if [ "$COVERITY_SCAN_BRANCH" != 1 ]; then cmake . -G"Unix Makefiles" -DCMAKE_CXX_COMPILER=$(which $COMPILER); fi
   - if [ "$COVERITY_SCAN_BRANCH" != 1 ]; then make; fi
   - if [ "$COVERITY_SCAN_BRANCH" != 1 ]; then ./test/bin/unittest; fi
+  - if [ "$COVERITY_SCAN_BRANCH" != 1 ]; then valgrind --error-exitcode=1 --leak-check=full ./test/bin/unittest; fi
 
 after_success:
-  - if [ "$COVERITY_SCAN_BRANCH" != 1 ]; then valgrind --error-exitcode=1 --leak-check=full ./test/bin/unittest; fi
   - if [ "$COVERITY_SCAN_BRANCH" != 1 ]; then coveralls --include src --gcov-options '\-lp' --gcov 'gcov-4.9'; fi
